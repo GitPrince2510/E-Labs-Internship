@@ -1,0 +1,37 @@
+USE `e-commerce`;
+
+CREATE TABLE Customer(
+	Customer_id INT auto_increment PRIMARY KEY,
+    Customer_Name VARCHAR(25) NOT NULL,
+    Email VARCHAR(50) UNIQUE,
+    Phone BIGINT(10),
+    Address VARCHAR(100)
+);
+
+CREATE TABLE Orders(
+	Order_id INT auto_increment PRIMARY KEY,
+    Order_Name VARCHAR(45) NOT NULL,
+    Customer_id INT NOT NULL,
+    Order_date DATE NOT NULL,
+    Amount DOUBLE NOT NULL,
+    FOREIGN KEY (Customer_id) REFERENCES Customer(Customer_id)
+);
+
+
+SELECT * FROM CUSTOMER;
+
+INSERT INTO Customer(Customer_Name, Email, Phone, Address) VALUES ('Aditya Sharma', 'Adi24@gmail.com', 9678452321, 'Delhi'), ('Barkha Bisht', 'Barkha12@gmail.com', 7456218391, 'Gurugram'), ('Chaman Kumar', 'Chomu56@gmail.com', 9785437681, 'Noida'); 
+
+SELECT * FROM ORDERS;
+
+INSERT INTO Orders(Order_Name, Customer_id, Order_date, Amount) VALUES ('Lakme-Lipstick', 2, '2025-11-17', 499.99), ('BaseBall Bat', 3, '2025-11-18', 1499.9), ('Philips_Iron', 1, '2025-11-19', 1259.04);
+
+SELECT Customer_Name, Order_Name FROM Customer, Orders WHERE Customer.Customer_id = Orders.Customer_id;
+
+INSERT INTO Customer(Customer_Name, Email, Phone, Address) VALUES ('Pari Rajput', 'Par45@gmail.com', 9678414532, 'Chandigarh'), ('Shikar Sandhu', 'Sik89@gmail.com', 7654892135, 'Mohali');
+
+SELECT Customer_Name, Order_Name FROM Customer LEFT JOIN Orders ON Customer.Customer_id = Orders.Customer_id;
+
+SELECT Email, Order_Name FROM Customer RIGHT JOIN Orders ON Customer.Customer_id = Orders.Customer_id;
+
+SELECT * FROM Customer LEFT JOIN Orders ON Customer.Customer_id = Orders.Customer_id UNION SELECT * FROM Customer RIGHT JOIN Orders ON Customer.Customer_id = Orders.Customer_id;
