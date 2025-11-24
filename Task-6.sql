@@ -1,0 +1,7 @@
+USE `e-commerce`;
+
+SELECT * FROM Customer WHERE Customer_id = ( SELECT Customer_id FROM Orders WHERE Amount > 1000 LIMIT 1);
+
+SELECT * FROM Orders WHERE Customer_id IN ( SELECT Customer_id FROM Customer WHERE Address IN ('Delhi', 'Noida') );
+
+SELECT * FROM Customer WHERE EXISTS ( SELECT 1 FROM Orders WHERE Orders.Customer_id=Customer.Customer_id );
