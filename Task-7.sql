@@ -1,0 +1,35 @@
+USE `e-commerce`;
+
+CREATE OR REPLACE VIEW customer_order_summary AS
+SELECT
+  c.Customer_id,
+  c.Customer_Name,
+  c.Email,
+  COALESCE(COUNT(o.Order_id),0)          AS total_orders,
+  COALESCE(SUM(o.Amount),0.00)           AS total_spent,
+  MAX(o.Order_date)                      AS last_order_date,
+  (
+    SELECT o2.Order_Name
+    FROM Orders o2
+    WHERE o2.Customer_id = c.Customer_id
+    ORDER BY o2.Order_date DESC
+    LIMIT 1
+  )                                       AS last_order_name
+FROM Customer c
+LEFT JOIN Orders o ON c.Customer_id = o.Customer_id
+GROUP BY c.Customer_id, c.Customer_Name, c.Email;
+
+SELECT * FROM customer_order_summary;
+
+CREATE OR REPLACE VIEW vw_orders_public AS
+SELECT
+  o.Order_id,
+  o.Order_Name,
+  o.Order_date,
+  o.Amount,
+  c.Customer_id,
+  c.Customer_Name
+FROM Orders o
+JOIN Customer c ON o.Customer_id = c.Customer_id;
+
+GRANT SELECT ON `e-commerce`.vw_orders_public TO 'readonly'@'host';
